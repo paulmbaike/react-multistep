@@ -16,7 +16,7 @@ const LiClass = props => css`
   cursor: pointer;
 
   color: ${props.state === 'todo' ? 'silver': 'black'};
-  border-bottom: 4px solid ${props.state === 'todo' ? 'silver' : '#33C3F0'};
+  border-bottom: 4px solid ${props.state === 'todo' ? 'silver' : (props.stepBackgroundColor || '#33C3F0')};
 
   &:before {
     position: relative;
@@ -28,14 +28,16 @@ const LiClass = props => css`
                        props.state === 'doing' ? 'content: "\u2022";' : 
                       'content: "\u2713";'}
     color: ${props.state === 'todo' ? 'silver' : 'white'};
-    background-color: ${props.state === 'todo' ? 'white' : '#33C3F0'};  
+    background-color: ${props.state === 'todo' ? 'white' : (props.stepBackgroundColor || '#33C3F0')};  
     width: 1.2em;
-    line-height: ${props.state === 'todo' ? '1.2em' : '1.4em'};
+    height: 1.2em;
+    line-height: ${props.state === 'todo' ? '1.2em' : '1.2em'};
+    line-height:normal;
     border-radius: ${props.state === 'todo' ? '0' : '1.2em'};
   }
   &:hover,
   &::before {
-    color: #0FA0CE;
+    color: ${props.stepBackgroundHoverColor || '#0FA0CE'};
   }
   &:after {
     content: "\\00a0\\00a0";
@@ -88,6 +90,8 @@ export default function MultiStep(props) {
   let nextStyle = {}
   if (props.nextStyle) nextStyle = props.nextStyle
 
+  const {prevClass,nextClass} = props
+
   const [stylesState, setStyles] = useState(getTopNavStyles(0, props.steps.length))
   const [compState, setComp] = useState(0)
   const [buttonsState, setButtons] = useState(getButtonsState(0, props.steps.length))
@@ -113,15 +117,14 @@ export default function MultiStep(props) {
     }
   }
 
-  const renderSteps = () =>
-    props.steps.map((s, i) => (
+  const renderSteps = () => props.steps.map((s, i) => (
         <li
-          className={LiClass({state: stylesState[i]})} 
+          className={LiClass({state: stylesState[i], stepBackgroundColor:props.stepBackgroundColor, stepBackgroundHoverColor:props.stepBackgroundHoverColor})} 
           onClick={handleOnClick}
           key={i}
           value={i}
         >
-          <span>{i+1}</span>
+          <span>{s.name}</span>
         </li>
     ))
 
@@ -129,6 +132,7 @@ export default function MultiStep(props) {
     show && (
       <div>
         <button
+          className={prevClass}
           style={buttonsState.showPreviousBtn ? props.prevStyle : { display: 'none' }}
           onClick={previous}
         >
@@ -136,6 +140,7 @@ export default function MultiStep(props) {
         </button>
 
         <button
+          className={nextClass}
           style={buttonsState.showNextBtn ? props.nextStyle : { display: 'none' }}
           onClick={next}
         >

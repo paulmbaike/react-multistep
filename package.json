@@ -22,15 +22,15 @@
     "url": "https://github.com/srdjan/react-multistep/issues"
   },
   "dependencies": {
-    "goober": "2.0.10"
+    "goober": "2.0.35"
   },
   "devDependencies": {
-    "csstype": "3.0.5",
-    "esbuild": "0.8.21",
-    "react": "17.0.1"
+    "csstype": "3.0.7",
+    "esbuild": "0.9.7",
+    "react": "17.0.2"
   },
   "peerDependencies": {
-    "react": "17.0.1"
+    "react": "17.0.2"
   },
   "scripts": {
     "build": "esbuild react-multistep.js '--define:process.env.NODE_ENV=\"development\"' --external:'react' --bundle --format=cjs --loader:.js=jsx --outfile=index.tar",
